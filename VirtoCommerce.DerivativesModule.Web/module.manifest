@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<module>
+    <id>VirtoCommerce.Derivatives</id>
+    <version>1.0.0</version>
+    <platformVersion>2.13.22</platformVersion>
+    <dependencies>
+    </dependencies>
+  
+  
+    <title>Derivatives module</title>
+    <description></description>
+    <authors>
+        <author>Valeriy Krashenko</author>
+    </authors>
+    <owners>
+        <owner>Virto Commerce</owner>
+    </owners>  
+  
+  
+    <assemblyFile>VirtoCommerce.DerivativesModule.Web.dll</assemblyFile>
+    <moduleType>VirtoCommerce.DerivativesModule.Web.Module, VirtoCommerce.DerivativesModule.Web</moduleType>
+
+    <styles>
+    </styles>
+    <scripts>
+    </scripts>
+
+    <settings>
+    </settings>
+
+    <permissions>
+    </permissions>
+</module>
