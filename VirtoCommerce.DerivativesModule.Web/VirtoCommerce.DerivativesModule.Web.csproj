@@ -133,9 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="module.manifest" />
-    <Content Include="Scripts\blades\helloWorld_blade1.js" />
-    <Content Include="Scripts\blades\helloWorld_blade1.tpl.html" />
-    <Content Include="Scripts\resources\VirtoCommerce.DerivativesModule.WebApi.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
