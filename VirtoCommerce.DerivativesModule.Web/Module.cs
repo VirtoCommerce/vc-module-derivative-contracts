@@ -1,11 +1,17 @@
 ﻿using Microsoft.Practices.Unity;
+using VirtoCommerce.DerivativesModule.Core.Services;
+using VirtoCommerce.DerivativesModule.Data.Repositories;
+using VirtoCommerce.DerivativesModule.Data.Services;
+using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.Modularity;
+using VirtoCommerce.Platform.Data.Infrastructure;
+using VirtoCommerce.Platform.Data.Infrastructure.Interceptors;
 
 namespace VirtoCommerce.DerivativesModule.Web
 {
     public class Module : ModuleBase
     {
-        // private const string _connectionStringName = "VirtoCommerce";
+        private static readonly string _connectionString = ConfigurationHelper.GetConnectionStringValue("VirtoCommerce");
         private readonly IUnityContainer _container;
 
         public Module(IUnityContainer container)
@@ -15,39 +21,19 @@ namespace VirtoCommerce.DerivativesModule.Web
 
         public override void SetupDatabase()
         {
-            // Modify database schema with EF migrations
-            // using (var context = new PricingRepositoryImpl(_connectionStringName))
-            // {
-            //     var initializer = new SetupDatabaseInitializer<MyRepository, Data.Migrations.Configuration>();
-            //     initializer.InitializeDatabase(context);
-            // }
+            using (var db = new DerivativeRepository(_connectionString, _container.Resolve<AuditableInterceptor>()))
+            {
+                var initializer = new SetupDatabaseInitializer<DerivativeRepository, Data.Migrations.Configuration>();
+                initializer.InitializeDatabase(db);
+            }
         }
 
         public override void Initialize()
         {
             base.Initialize();
 
-            // This method is called for each installed module on the first stage of initialization.
-
-            // Register implementations:
-            // _container.RegisterType<IMyRepository>(new InjectionFactory(c => new MyRepository(_connectionStringName, new EntityPrimaryKeyGeneratorInterceptor()));
-            // _container.RegisterType<IMyService, MyServiceImplementation>();
-
-            // Try to avoid calling _container.Resolve<>();
-        }
-
-        public override void PostInitialize()
-        {
-            base.PostInitialize();
-
-            // This method is called for each installed module on the second stage of initialization.
-
-            // Register implementations 
-            // _container.RegisterType<IMyService, MyService>();
-
-            // Resolve registered implementations:
-            // var settingManager = _container.Resolve<ISettingsManager>();
-            // var value = settingManager.GetValue("Pricing.ExportImport.Description", string.Empty);
+            _container.RegisterType<IDerivativeRepository>(new InjectionFactory(c => new DerivativeRepository(_connectionString, new EntityPrimaryKeyGeneratorInterceptor(), _container.Resolve<AuditableInterceptor>())));
+            _container.RegisterType<IDerivativeService, DerivativeService>();
         }
     }
 }

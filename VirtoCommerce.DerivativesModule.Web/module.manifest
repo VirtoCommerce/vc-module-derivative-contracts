@@ -4,6 +4,7 @@
     <version>1.0.0</version>
     <platformVersion>2.13.22</platformVersion>
     <dependencies>
+        <dependency id="VirtoCommerce.Core" version="2.24.30" />
     </dependencies>
   
   
