@@ -34,6 +34,7 @@ namespace VirtoCommerce.DerivativesModule.Web
 
             _container.RegisterType<IDerivativeRepository>(new InjectionFactory(c => new DerivativeRepository(_connectionString, new EntityPrimaryKeyGeneratorInterceptor(), _container.Resolve<AuditableInterceptor>())));
             _container.RegisterType<IDerivativeService, DerivativeService>();
+            _container.RegisterType<IDerivativeSearchService, DerivativeSearchService>();
         }
     }
 }

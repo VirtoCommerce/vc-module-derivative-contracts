@@ -11,10 +11,27 @@ namespace VirtoCommerce.DerivativesModule.Web.Controllers.Api
     public class DerivativeController : ApiController
     {
         private readonly IDerivativeService _derivativeService;
+        private readonly IDerivativeSearchService _derivativeSearchService;
 
-        public DerivativeController(IDerivativeService derivativeService)
+        public DerivativeController(IDerivativeService derivativeService, IDerivativeSearchService derivativeSearchService)
         {
             _derivativeService = derivativeService;
+            _derivativeSearchService = derivativeSearchService;
+        }
+
+        /// <summary>
+        /// Search for FulfillmentCenterMapping by AssetEntrySearchCriteria
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("search")]
+        [ResponseType(typeof(DerivativeSearchResult))]
+        // [CheckPermission(Permission = PredefinedPermissions.AssetAccess)]
+        public IHttpActionResult Search(DerivativeSearchCriteria criteria)
+        {
+            var result = _derivativeSearchService.SearchDerivatives(criteria);
+            return Ok(result);
         }
 
         /// <summary>
@@ -36,7 +53,7 @@ namespace VirtoCommerce.DerivativesModule.Web.Controllers.Api
 
             return NotFound();
         }
-        
+
         /// <summary>
         ///  Create new or update existing Derivative
         /// </summary>
@@ -51,7 +68,7 @@ namespace VirtoCommerce.DerivativesModule.Web.Controllers.Api
             _derivativeService.SaveDerivatives(items);
             return Ok();
         }
-        
+
         /// <summary>
         /// Delete Derivatives by IDs
         /// </summary>

@@ -51,8 +51,11 @@
     </Compile>
     <Compile Include="Model\Derivative.cs" />
     <Compile Include="Model\DerivativeItem.cs" />
+    <Compile Include="Model\DerivativeSearchCriteria.cs" />
+    <Compile Include="Model\DerivativeSearchResult.cs" />
     <Compile Include="Model\DerivativeType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IDerivativeSearchService.cs" />
     <Compile Include="Services\IDerivativeService.cs" />
   </ItemGroup>
   <ItemGroup>

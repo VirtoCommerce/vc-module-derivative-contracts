@@ -33,6 +33,9 @@
     <Reference Include="Antlr4.Runtime.Standard, Version=4.7.0.0, Culture=neutral, PublicKeyToken=e78b2c5abd1fcb3f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr4.Runtime.Standard.4.7.1\lib\net35\Antlr4.Runtime.Standard.dll</HintPath>
     </Reference>
+    <Reference Include="CacheManager.Core, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CacheManager.Core.0.8.0\lib\net45\CacheManager.Core.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -44,6 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -78,6 +82,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DerivativeRepository.cs" />
     <Compile Include="Repositories\IDerivativeRepository.cs" />
+    <Compile Include="Services\DerivativeSearchService.cs" />
     <Compile Include="Services\DerivativeService.cs" />
   </ItemGroup>
   <ItemGroup>
