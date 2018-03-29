@@ -35,23 +35,18 @@ namespace VirtoCommerce.DerivativesModule.Web.Controllers.Api
         }
 
         /// <summary>
-        /// Get Derivative by ID
+        /// Get Derivatives by IDs
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="ids"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{id}")]
-        [ResponseType(typeof(Derivative))]
+        [Route("{ids}")]
+        [ResponseType(typeof(Derivative[]))]
         // [CheckPermission(Permission = PredefinedPermissions...)]
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(string[] ids)
         {
-            var retVal = _derivativeService.GetDerivativesByIds(new[] { id });
-            if (retVal?.Any() == true)
-            {
-                return Ok(retVal.Single());
-            }
-
-            return NotFound();
+            var retVal = _derivativeService.GetDerivativesByIds(ids);
+            return Ok(retVal.ToArray());
         }
 
         /// <summary>
