@@ -30,19 +30,19 @@ namespace VirtoCommerce.DerivativesModule.Data.Model
         public decimal PurchasedQuantity { get; set; }
 
 
-        internal DerivativeItem ToModel(DerivativeItem item)
+        public virtual DerivativeItem ToModel(DerivativeItem item)
         {
             item.InjectFrom(this);
             return item;
         }
 
-        public DerivativeItemEntity FromModel(DerivativeItem item)
+        public virtual DerivativeItemEntity FromModel(DerivativeItem item)
         {
             this.InjectFrom(item);
             return this;
         }
 
-        public void Patch(DerivativeItemEntity target)
+        public virtual void Patch(DerivativeItemEntity target)
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
