@@ -1,7 +1,9 @@
-﻿using Microsoft.Practices.Unity;
+﻿using System.Web.Http;
+using Microsoft.Practices.Unity;
 using VirtoCommerce.DerivativesModule.Core.Services;
 using VirtoCommerce.DerivativesModule.Data.Repositories;
 using VirtoCommerce.DerivativesModule.Data.Services;
+using VirtoCommerce.DerivativesModule.Web.JsonConverters;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Core.Modularity;
 using VirtoCommerce.Platform.Data.Infrastructure;
@@ -35,6 +37,15 @@ namespace VirtoCommerce.DerivativesModule.Web
             _container.RegisterType<IDerivativeRepository>(new InjectionFactory(c => new DerivativeRepository(_connectionString, new EntityPrimaryKeyGeneratorInterceptor(), _container.Resolve<AuditableInterceptor>())));
             _container.RegisterType<IDerivativeService, DerivativeService>();
             _container.RegisterType<IDerivativeSearchService, DerivativeSearchService>();
+        }
+
+        public override void PostInitialize()
+        {
+            base.PostInitialize();
+
+            // enable polymorphic types in API controller methods
+            var httpConfiguration = _container.Resolve<HttpConfiguration>();
+            httpConfiguration.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new PolymorphicDerivativesJsonConverter());
         }
     }
 }
