@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<module>
+    <id>VirtoCommerce.DerivativeContracts</id>
+    <version>1.0.0</version>
+    <platformVersion>2.13.24</platformVersion>
+    <dependencies>
+        <dependency id="VirtoCommerce.Core" version="2.24.30" />
+    </dependencies>
+  
+  
+    <title>Derivative contracts module</title>
+    <description></description>
+    <authors>
+        <author>Aleksandr Vishniakov</author>
+        <author>Egidijus Mazeika</author>
+        <author>Valeriy Krashenko</author>
+    </authors>
+    <owners>
+        <owner>Virto Commerce</owner>
+    </owners>  
+  
+  
+    <assemblyFile>VirtoCommerce.DerivativeContractsModule.Web.dll</assemblyFile>
+    <moduleType>VirtoCommerce.DerivativeContractsModule.Web.Module, VirtoCommerce.DerivativeContractsModule.Web</moduleType>
+
+    <styles>
+    </styles>
+    <scripts>
+    </scripts>
+
+    <settings>
+    </settings>
+
+    <permissions>
+    </permissions>
+</module>

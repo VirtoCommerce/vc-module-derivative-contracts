@@ -6,12 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyCompany("VirtoCommerce")]
-[assembly: AssemblyProduct("Virto Commerce Derivatives Module")]
+[assembly: AssemblyProduct("Virto Commerce Derivative Contracts Module")]
 [assembly: AssemblyCopyright("Copyright © VirtoCommerce 2011-2018")]
 
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyInformationalVersion("0.0.1-beta")]
 
 #if DEBUG
 
