@@ -6,10 +6,8 @@
     <dependencies>
         <dependency id="VirtoCommerce.Core" version="2.24.30" />
     </dependencies>
-  
-  
     <title>Derivative contracts module</title>
-    <description></description>
+    <description>Provide ability to store infor about derivative contracts, such as Forward contracts, Futures or Options.</description>
     <authors>
         <author>Aleksandr Vishniakov</author>
         <author>Egidijus Mazeika</author>
@@ -17,9 +15,13 @@
     </authors>
     <owners>
         <owner>Virto Commerce</owner>
-    </owners>  
-  
-  
+    </owners>
+    <projectUrl></projectUrl>
+    <iconUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts/raw/master/VirtoCommerce.DerivativeContractsModule.Web/Content/logo.png</iconUrl>
+    <releaseNotes>First version</releaseNotes>
+    <copyright>Copyright © 2011-2018 Virto Commerce. All rights reserved</copyright>
+    <tags>derivative contracts forward futures options</tags>
+
     <assemblyFile>VirtoCommerce.DerivativeContractsModule.Web.dll</assemblyFile>
     <moduleType>VirtoCommerce.DerivativeContractsModule.Web.Module, VirtoCommerce.DerivativeContractsModule.Web</moduleType>
 

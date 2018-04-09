@@ -15,7 +15,7 @@ IF NOT DEFINED MSBUILD_PATH SET MSBUILD_PATH=%WINDIR%\Microsoft.NET\Framework\v4
 
 "%MSBUILD_PATH%" "%SOURCE_DIR%\CMG.ExtensionsModule.sln" /nologo /verbosity:m /t:Build /p:Configuration=Release;Platform="Any CPU"
 
-nuget pack "%SOURCE_DIR%\VirtoCommerce.DerivativesModule.Core\VirtoCommerce.DerivativesModule.Core.csproj" -IncludeReferencedProjects -Symbols -Properties Configuration=Release -o "%TARGET_DIR%"
-nuget pack "%SOURCE_DIR%\VirtoCommerce.DerivativesModule.Data\VirtoCommerce.DerivativesModule.Data.csproj" -IncludeReferencedProjects -Symbols -Properties Configuration=Release -o "%TARGET_DIR%"
+nuget pack "%SOURCE_DIR%\VirtoCommerce.DerivativeContractsModule.Core\VirtoCommerce.DerivativeContractsModule.Core.csproj" -IncludeReferencedProjects -Symbols -Properties Configuration=Release -o "%TARGET_DIR%"
+nuget pack "%SOURCE_DIR%\VirtoCommerce.DerivativeContractsModule.Data\VirtoCommerce.DerivativeContractsModule.Data.csproj" -IncludeReferencedProjects -Symbols -Properties Configuration=Release -o "%TARGET_DIR%"
 
 @pause
