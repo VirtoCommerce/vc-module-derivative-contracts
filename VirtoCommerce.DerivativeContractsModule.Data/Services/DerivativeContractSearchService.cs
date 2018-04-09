@@ -129,7 +129,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
 
                 if (criteria.StartDateRange?.LaterDate != null)
                 {
-                    query = query.Where(dci => criteria.StartDateRange.IncludeLater ? dci.DerivativeContract.StartDate >= criteria.StartDateRange.LaterDate : dci.DerivativeContract.StartDate > criteria.StartDateRange.LaterDate);
+                    query = query.Where(dci => criteria.StartDateRange.IncludeLater ? dci.DerivativeContract.StartDate <= criteria.StartDateRange.LaterDate : dci.DerivativeContract.StartDate < criteria.StartDateRange.LaterDate);
                 }
 
                 if (criteria.EndDateRange?.EarlierDate != null)
@@ -139,7 +139,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
 
                 if (criteria.EndDateRange?.LaterDate != null)
                 {
-                    query = query.Where(dci => criteria.EndDateRange.IncludeLater ? dci.DerivativeContract.EndDate >= criteria.EndDateRange.LaterDate : dci.DerivativeContract.EndDate > criteria.EndDateRange.LaterDate);
+                    query = query.Where(dci => criteria.EndDateRange.IncludeLater ? dci.DerivativeContract.EndDate <= criteria.EndDateRange.LaterDate : dci.DerivativeContract.EndDate < criteria.EndDateRange.LaterDate);
                 }
 
                 if (criteria.OnlyActive)
