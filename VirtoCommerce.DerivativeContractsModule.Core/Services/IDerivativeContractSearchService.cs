@@ -6,5 +6,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Core.Services
     public interface IDerivativeContractSearchService
     {
         GenericSearchResult<DerivativeContract> SearchDerivativeContracts(DerivativeContractSearchCriteria criteria);
+
+        GenericSearchResult<DerivativeContractItem> SearchDerivativeContractItems(DerivativeContractItemSearchCriteria criteria);
     }
 }

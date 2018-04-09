@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Omu.ValueInjecter;
 using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.Platform.Core.Common;
 
@@ -26,8 +24,6 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Model
         [Required]
         public bool IsActive { get; set; }
 
-        public ObservableCollection<DerivativeContractItemEntity> Items { get; set; } = new NullCollection<DerivativeContractItemEntity>();
-
         public virtual DerivativeContract ToModel(DerivativeContract derivativeContract)
         {
             if (derivativeContract == null)
@@ -46,8 +42,6 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Model
             derivativeContract.StartDate = StartDate;
             derivativeContract.EndDate = EndDate;
             derivativeContract.IsActive = IsActive;
-
-            derivativeContract.Items = Items.Select(i => i.ToModel(AbstractTypeFactory<DerivativeContractItem>.TryCreateInstance())).ToArray();
 
             return derivativeContract;
         }
@@ -72,11 +66,6 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Model
             EndDate = derivativeContract.EndDate;
             IsActive = derivativeContract.IsActive;
 
-            if (derivativeContract.Items != null)
-            {
-                Items = new ObservableCollection<DerivativeContractItemEntity>(derivativeContract.Items.Select(i => AbstractTypeFactory<DerivativeContractItemEntity>.TryCreateInstance().FromModel(i)));
-            }
-
             return this;
         }
 
@@ -90,11 +79,6 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Model
             target.StartDate = StartDate;
             target.EndDate = EndDate;
             target.IsActive = IsActive;
-
-            if (!Items.IsNullCollection())
-            {
-                Items.Patch(target.Items, AbstractTypeFactory<DerivativeContractItemEntityComparer>.TryCreateInstance(), (sourceItem, targetItem) => sourceItem.Patch(targetItem));
-            }
         }
     }
 }

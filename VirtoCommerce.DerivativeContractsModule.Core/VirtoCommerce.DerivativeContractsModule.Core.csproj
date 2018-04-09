@@ -52,14 +52,20 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DerivativeContractItemSearchCriteria.cs" />
+    <Compile Include="Model\DateTimeRange.cs" />
     <Compile Include="Model\DerivativeContract.cs" />
     <Compile Include="Model\DerivativeContractItem.cs" />
+    <Compile Include="Model\DerivativeContractSearchCriteriaBase.cs" />
     <Compile Include="Model\DerivativeContractSearchCriteria.cs" />
     <Compile Include="Model\DerivativeContractSearchResponseGroup.cs" />
-    <Compile Include="Model\DerivativeType.cs" />
+    <Compile Include="Model\DerivativeContractInfo.cs" />
+    <Compile Include="Model\DerivativeContractInfoEvaluationContext.cs" />
+    <Compile Include="Model\DerivativeContractType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IDerivativeContractSearchService.cs" />
     <Compile Include="Services\IDerivativeContractService.cs" />
+    <Compile Include="Services\IDerivativeContractInfoEvaluator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

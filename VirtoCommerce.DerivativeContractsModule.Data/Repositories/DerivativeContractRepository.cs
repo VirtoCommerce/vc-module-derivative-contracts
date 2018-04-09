@@ -25,7 +25,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Repositories
             modelBuilder.Entity<DerivativeContractEntity>().ToTable("DerivativeContract").HasKey(x => x.Id).Property(x => x.Id);
 
             modelBuilder.Entity<DerivativeContractItemEntity>().ToTable("DerivativeContractItem").HasKey(x => x.Id).Property(x => x.Id);
-            modelBuilder.Entity<DerivativeContractItemEntity>().HasRequired(dc => dc.DerivativeContract).WithMany(dci => dci.Items).HasForeignKey(dc => dc.DerivativeContractId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<DerivativeContractItemEntity>().HasRequired(dc => dc.DerivativeContract).WithMany().HasForeignKey(dc => dc.DerivativeContractId).WillCascadeOnDelete(true);
             modelBuilder.Entity<DerivativeContractItemEntity>().Property(t => t.DerivativeContractId)
                    .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IX_DerivativeContractItem_DerivativeContractId_FulfillmentCenterId_ProductId", 1) { IsUnique = true }));
             modelBuilder.Entity<DerivativeContractItemEntity>().Property(t => t.FulfillmentCenterId)
@@ -38,14 +38,30 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Repositories
 
         public IQueryable<DerivativeContractEntity> DerivativeContracts => GetAsQueryable<DerivativeContractEntity>();
 
+        public IQueryable<DerivativeContractItemEntity> DerivativeContractItems => GetAsQueryable<DerivativeContractItemEntity>();
+
         public DerivativeContractEntity[] GetDerivativeContractsByIds(string[] ids)
         {
-            return DerivativeContracts.Where(dc => ids.Contains(dc.Id)).Include(dc => dc.Items).ToArray();
+            return DerivativeContracts.Where(dc => ids.Contains(dc.Id)).ToArray();
+        }
+
+        public DerivativeContractItemEntity[] GetDerivativeContractItemsByIds(string[] ids)
+        {
+            return DerivativeContractItems.Where(dci => ids.Contains(dci.Id)).ToArray();
         }
 
         public void RemoveDerivativeContracts(string[] ids)
         {
             var items = GetDerivativeContractsByIds(ids);
+            foreach (var item in items)
+            {
+                Remove(item);
+            }
+        }
+
+        public void RemoveDerivativeContractItems(string[] ids)
+        {
+            var items = GetDerivativeContractItemsByIds(ids);
             foreach (var item in items)
             {
                 Remove(item);

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.Platform.Core.Common;
-using VirtoCommerce.Platform.Data.Common.ConventionInjections;
 
 namespace VirtoCommerce.DerivativeContractsModule.Data.Model
 {
@@ -43,7 +41,9 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Model
         {
             if (derivativeContractItem == null)
                 throw new ArgumentNullException(nameof(derivativeContractItem));
-            
+
+            derivativeContractItem.Id = Id;
+
             derivativeContractItem.CreatedBy = CreatedBy;
             derivativeContractItem.CreatedDate = CreatedDate;
             derivativeContractItem.ModifiedBy = ModifiedBy;
@@ -58,10 +58,14 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Model
             return derivativeContractItem;
         }
 
-        public virtual DerivativeContractItemEntity FromModel(DerivativeContractItem derivativeContractItem)
+        public virtual DerivativeContractItemEntity FromModel(DerivativeContractItem derivativeContractItem, PrimaryKeyResolvingMap pkMap)
         {
             if (derivativeContractItem == null)
                 throw new ArgumentNullException(nameof(derivativeContractItem));
+
+            pkMap.AddPair(derivativeContractItem, this);
+
+            Id = derivativeContractItem.Id;
 
             CreatedBy = derivativeContractItem.CreatedBy;
             CreatedDate = derivativeContractItem.CreatedDate;

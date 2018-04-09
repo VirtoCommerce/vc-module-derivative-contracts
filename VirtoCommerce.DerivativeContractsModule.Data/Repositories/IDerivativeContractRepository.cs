@@ -8,8 +8,14 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Repositories
     {
         IQueryable<DerivativeContractEntity> DerivativeContracts { get; }
 
+        IQueryable<DerivativeContractItemEntity> DerivativeContractItems { get; }
+
         DerivativeContractEntity[] GetDerivativeContractsByIds(string[] ids);
 
+        DerivativeContractItemEntity[] GetDerivativeContractItemsByIds(string[] ids);
+
         void RemoveDerivativeContracts(string[] ids);
+
+        void RemoveDerivativeContractItems(string[] ids);
     }
 }

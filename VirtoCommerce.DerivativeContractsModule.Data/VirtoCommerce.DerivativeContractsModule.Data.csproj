@@ -86,12 +86,12 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DerivativeContractEntity.cs" />
     <Compile Include="Model\DerivativeContractItemEntity.cs" />
-    <Compile Include="Model\DerivativeContractItemEntityComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DerivativeContractRepository.cs" />
     <Compile Include="Repositories\IDerivativeContractRepository.cs" />
     <Compile Include="Services\DerivativeContractSearchService.cs" />
-    <Compile Include="Services\DerivativeService.cs" />
+    <Compile Include="Services\DerivativeInfoEvaluator.cs" />
+    <Compile Include="Services\DerivativeContractService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -110,6 +110,9 @@
     <EmbeddedResource Include="Migrations\201804061759444_Initial.resx">
       <DependentUpon>201804061759444_Initial.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,8 +6,14 @@ namespace VirtoCommerce.DerivativeContractsModule.Core.Services
     {
         DerivativeContract[] GetDerivativeContractsByIds(string[] ids);
 
+        DerivativeContractItem[] GetDerivativeContractItemsByIds(string[] ids);
+
         void SaveDerivativeContracts(DerivativeContract[] derivativeContracts);
 
+        void SaveDerivativeContractItems(DerivativeContractItem[] derivativeContractItems);
+
         void DeleteDerivativeContracts(string[] ids);
+
+        void DeleteDerivativeContractItems(string[] ids);
     }
 }

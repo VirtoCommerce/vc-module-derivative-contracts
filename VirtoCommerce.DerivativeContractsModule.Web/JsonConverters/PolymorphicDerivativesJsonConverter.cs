@@ -9,7 +9,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.JsonConverters
 {
     public class PolymorphicDerivativeContractsJsonConverter : JsonConverter
     {
-        private readonly Type[] _knowTypes = new[] { typeof(DerivativeContract), typeof(DerivativeContractItem), typeof(DerivativeContractSearchCriteria) };
+        private readonly Type[] _knowTypes = new[] { typeof(DerivativeContract), typeof(DerivativeContractItem), typeof(DerivativeContractSearchCriteriaBase) };
 
         public override bool CanWrite => false;
         public override bool CanRead => true;

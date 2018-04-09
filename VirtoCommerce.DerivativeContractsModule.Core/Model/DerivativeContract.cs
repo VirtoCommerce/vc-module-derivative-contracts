@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using VirtoCommerce.Platform.Core.Common;
 
 namespace VirtoCommerce.DerivativeContractsModule.Core.Model
@@ -15,7 +14,5 @@ namespace VirtoCommerce.DerivativeContractsModule.Core.Model
         public DateTime? EndDate { get; set; }
 
         public bool IsActive { get; set; }
-
-        public ICollection<DerivativeContractItem> Items { get; set; }
     }
 }

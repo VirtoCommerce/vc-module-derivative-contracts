@@ -37,6 +37,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Web
             _container.RegisterType<IDerivativeContractRepository>(new InjectionFactory(c => new DerivativeContractRepository(_connectionString, new EntityPrimaryKeyGeneratorInterceptor(), _container.Resolve<AuditableInterceptor>())));
             _container.RegisterType<IDerivativeContractService, DerivativeContractService>();
             _container.RegisterType<IDerivativeContractSearchService, DerivativeContractSearchService>();
+            _container.RegisterType<IDerivativeContractInfoEvaluator, DerivativeContractInfoEvaluator>();
         }
 
         public override void PostInitialize()
