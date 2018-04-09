@@ -96,9 +96,24 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
 
                 var query = repository.DerivativeContractItems;
 
+                if (!criteria.DerivativeContractIds.IsNullOrEmpty())
+                {
+                    query = query.Where(dci => criteria.DerivativeContractIds.Contains(dci.DerivativeContractId));
+                }
+                
                 if (!criteria.MemberIds.IsNullOrEmpty())
                 {
                     query = query.Where(dci => criteria.MemberIds.Contains(dci.DerivativeContract.MemberId));
+                }
+
+                if (!criteria.FulfillmentCenterIds.IsNullOrEmpty())
+                {
+                    query = query.Where(dci => criteria.FulfillmentCenterIds.Contains(dci.FulfillmentCenterId));
+                }
+
+                if (!criteria.ProductIds.IsNullOrEmpty())
+                {
+                    query = query.Where(dci => criteria.ProductIds.Contains(dci.ProductId));
                 }
 
                 if (!criteria.Types.IsNullOrEmpty())

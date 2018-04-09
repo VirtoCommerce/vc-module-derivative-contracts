@@ -52,7 +52,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="DerivativeContractItemSearchCriteria.cs" />
+    <Compile Include="Model\DerivativeContractItemSearchCriteria.cs" />
     <Compile Include="Model\DateTimeRange.cs" />
     <Compile Include="Model\DerivativeContract.cs" />
     <Compile Include="Model\DerivativeContractItem.cs" />
