@@ -1,4 +1,5 @@
-﻿using VirtoCommerce.Domain.Common;
+﻿using System.Collections.Generic;
+using VirtoCommerce.Domain.Common;
 
 namespace VirtoCommerce.DerivativeContractsModule.Core.Model
 {
@@ -13,5 +14,15 @@ namespace VirtoCommerce.DerivativeContractsModule.Core.Model
         public long PurchasedQuantity { get; set; }
 
         public long RemainingQuantity { get; set; }
+
+        #region Overrides of ValueObject
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return ProductId;
+            yield return Type;
+        }
+
+        #endregion
     }
 }
