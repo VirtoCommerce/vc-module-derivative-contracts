@@ -8,10 +8,10 @@ namespace VirtoCommerce.DerivativeContractsModule.Core.Model
 
         public DerivativeContractType Type { get; set; }
 
-        public decimal ContractSize { get; set; }
+        public long ContractSize { get; set; }
 
-        public decimal PurchasedQuantity { get; set; }
+        public long PurchasedQuantity { get; set; }
 
-        public decimal RemainingQuantity { get; set; }
+        public long RemainingQuantity { get; set; }
     }
 }
