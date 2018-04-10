@@ -2,7 +2,6 @@
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
-using VirtoCommerce.DerivativeContractsModule.Core;
 using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.DerivativeContractsModule.Core.Services;
 using VirtoCommerce.DerivativeContractsModule.Web.Security;

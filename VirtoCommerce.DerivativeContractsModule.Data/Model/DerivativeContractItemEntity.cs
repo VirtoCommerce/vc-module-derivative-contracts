@@ -21,13 +21,13 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Model
         public string ProductId { get; set; }
 
         [Required]
-        public decimal ContractSize { get; set; }
+        public long ContractSize { get; set; }
 
         [Required]
-        public decimal PurchasedQuantity { get; set; }
+        public long PurchasedQuantity { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public virtual decimal RemainingQuantity
+        public virtual long RemainingQuantity
         {
             get
             {

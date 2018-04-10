@@ -83,6 +83,10 @@
     <Compile Include="Migrations\201804061759444_Initial.Designer.cs">
       <DependentUpon>201804061759444_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804101344035_DecimalToLong.cs" />
+    <Compile Include="Migrations\201804101344035_DecimalToLong.Designer.cs">
+      <DependentUpon>201804101344035_DecimalToLong.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DerivativeContractEntity.cs" />
     <Compile Include="Model\DerivativeContractItemEntity.cs" />
@@ -110,9 +114,10 @@
     <EmbeddedResource Include="Migrations\201804061759444_Initial.resx">
       <DependentUpon>201804061759444_Initial.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804101344035_DecimalToLong.resx">
+      <DependentUpon>201804101344035_DecimalToLong.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
