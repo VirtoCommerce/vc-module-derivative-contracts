@@ -94,7 +94,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.Controllers.Api
         [Route("items")]
         [ResponseType(typeof(void))]
         [CheckPermission(Permission = PredefinedPermissions.DerivativeContractUpdate)]
-        public IHttpActionResult Update(DerivativeContractItem[] derivativeContractItems)
+        public IHttpActionResult UpdateItems(DerivativeContractItem[] derivativeContractItems)
         {
             _derivativeContractService.SaveDerivativeContractItems(derivativeContractItems);
             return StatusCode(HttpStatusCode.NoContent);
