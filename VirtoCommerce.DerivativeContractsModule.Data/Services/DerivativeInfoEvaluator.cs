@@ -43,24 +43,24 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dci => evaluationContextTypes.Contains(dci.DerivativeContract.Type));
                 }
 
-                if (evaluationContext.StartDateRange?.EarlierDate != null)
+                if (evaluationContext.StartDateRange?.FromDate != null)
                 {
-                    query = query.Where(dci => evaluationContext.StartDateRange.IncludeEarlier ? evaluationContext.StartDateRange.EarlierDate <= dci.DerivativeContract.StartDate : evaluationContext.StartDateRange.EarlierDate < dci.DerivativeContract.StartDate);
+                    query = query.Where(dci => evaluationContext.StartDateRange.IncludeFrom ? evaluationContext.StartDateRange.FromDate <= dci.DerivativeContract.StartDate : evaluationContext.StartDateRange.FromDate < dci.DerivativeContract.StartDate);
                 }
 
-                if (evaluationContext.StartDateRange?.LaterDate != null)
+                if (evaluationContext.StartDateRange?.ToDate != null)
                 {
-                    query = query.Where(dci => evaluationContext.StartDateRange.IncludeLater ? dci.DerivativeContract.StartDate >= evaluationContext.StartDateRange.LaterDate : dci.DerivativeContract.StartDate > evaluationContext.StartDateRange.LaterDate);
+                    query = query.Where(dci => evaluationContext.StartDateRange.IncludeTo ? dci.DerivativeContract.StartDate >= evaluationContext.StartDateRange.ToDate : dci.DerivativeContract.StartDate > evaluationContext.StartDateRange.ToDate);
                 }
 
-                if (evaluationContext.EndDateRange?.EarlierDate != null)
+                if (evaluationContext.EndDateRange?.FromDate != null)
                 {
-                    query = query.Where(dci => evaluationContext.EndDateRange.IncludeEarlier ? evaluationContext.EndDateRange.EarlierDate <= dci.DerivativeContract.EndDate : evaluationContext.EndDateRange.EarlierDate < dci.DerivativeContract.EndDate);
+                    query = query.Where(dci => evaluationContext.EndDateRange.IncludeFrom ? evaluationContext.EndDateRange.FromDate <= dci.DerivativeContract.EndDate : evaluationContext.EndDateRange.FromDate < dci.DerivativeContract.EndDate);
                 }
 
-                if (evaluationContext.EndDateRange?.LaterDate != null)
+                if (evaluationContext.EndDateRange?.ToDate != null)
                 {
-                    query = query.Where(dci => evaluationContext.EndDateRange.IncludeLater ? dci.DerivativeContract.EndDate >= evaluationContext.EndDateRange.LaterDate : dci.DerivativeContract.EndDate > evaluationContext.EndDateRange.LaterDate);
+                    query = query.Where(dci => evaluationContext.EndDateRange.IncludeTo ? dci.DerivativeContract.EndDate >= evaluationContext.EndDateRange.ToDate : dci.DerivativeContract.EndDate > evaluationContext.EndDateRange.ToDate);
                 }
 
                 if (evaluationContext.OnlyActive)

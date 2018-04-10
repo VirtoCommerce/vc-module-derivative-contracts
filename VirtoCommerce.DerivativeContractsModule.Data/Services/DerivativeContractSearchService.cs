@@ -40,24 +40,24 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dc => criteriaTypes.Contains(dc.Type));
                 }
 
-                if (criteria.StartDateRange?.EarlierDate != null)
+                if (criteria.StartDateRange?.FromDate != null)
                 {
-                    query = query.Where(dc => criteria.StartDateRange.IncludeEarlier ? criteria.StartDateRange.EarlierDate <= dc.StartDate : criteria.StartDateRange.EarlierDate < dc.StartDate);
+                    query = query.Where(dc => criteria.StartDateRange.IncludeFrom ? criteria.StartDateRange.FromDate <= dc.StartDate : criteria.StartDateRange.FromDate < dc.StartDate);
                 }
 
-                if (criteria.StartDateRange?.LaterDate != null)
+                if (criteria.StartDateRange?.ToDate != null)
                 {
-                    query = query.Where(dc => criteria.StartDateRange.IncludeLater ? dc.StartDate <= criteria.StartDateRange.LaterDate : dc.StartDate < criteria.StartDateRange.LaterDate);
+                    query = query.Where(dc => criteria.StartDateRange.IncludeTo ? dc.StartDate <= criteria.StartDateRange.ToDate : dc.StartDate < criteria.StartDateRange.ToDate);
                 }
 
-                if (criteria.EndDateRange?.EarlierDate != null)
+                if (criteria.EndDateRange?.FromDate != null)
                 {
-                    query = query.Where(dc => criteria.EndDateRange.IncludeEarlier ? criteria.EndDateRange.EarlierDate <= dc.EndDate : criteria.EndDateRange.EarlierDate < dc.EndDate);
+                    query = query.Where(dc => criteria.EndDateRange.IncludeFrom ? criteria.EndDateRange.FromDate <= dc.EndDate : criteria.EndDateRange.FromDate < dc.EndDate);
                 }
 
-                if (criteria.EndDateRange?.LaterDate != null)
+                if (criteria.EndDateRange?.ToDate != null)
                 {
-                    query = query.Where(dc => criteria.EndDateRange.IncludeLater ? dc.EndDate <= criteria.EndDateRange.LaterDate : dc.EndDate < criteria.EndDateRange.LaterDate);
+                    query = query.Where(dc => criteria.EndDateRange.IncludeTo ? dc.EndDate <= criteria.EndDateRange.ToDate : dc.EndDate < criteria.EndDateRange.ToDate);
                 }
 
                 if (criteria.OnlyActive)
@@ -122,24 +122,24 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dci => criteriaTypes.Contains(dci.DerivativeContract.Type));
                 }
 
-                if (criteria.StartDateRange?.EarlierDate != null)
+                if (criteria.StartDateRange?.FromDate != null)
                 {
-                    query = query.Where(dci => criteria.StartDateRange.IncludeEarlier ? criteria.StartDateRange.EarlierDate <= dci.DerivativeContract.StartDate : criteria.StartDateRange.EarlierDate < dci.DerivativeContract.StartDate);
+                    query = query.Where(dci => criteria.StartDateRange.IncludeFrom ? criteria.StartDateRange.FromDate <= dci.DerivativeContract.StartDate : criteria.StartDateRange.FromDate < dci.DerivativeContract.StartDate);
                 }
 
-                if (criteria.StartDateRange?.LaterDate != null)
+                if (criteria.StartDateRange?.ToDate != null)
                 {
-                    query = query.Where(dci => criteria.StartDateRange.IncludeLater ? dci.DerivativeContract.StartDate <= criteria.StartDateRange.LaterDate : dci.DerivativeContract.StartDate < criteria.StartDateRange.LaterDate);
+                    query = query.Where(dci => criteria.StartDateRange.IncludeTo ? dci.DerivativeContract.StartDate <= criteria.StartDateRange.ToDate : dci.DerivativeContract.StartDate < criteria.StartDateRange.ToDate);
                 }
 
-                if (criteria.EndDateRange?.EarlierDate != null)
+                if (criteria.EndDateRange?.FromDate != null)
                 {
-                    query = query.Where(dci => criteria.EndDateRange.IncludeEarlier ? criteria.EndDateRange.EarlierDate <= dci.DerivativeContract.EndDate : criteria.EndDateRange.EarlierDate < dci.DerivativeContract.EndDate);
+                    query = query.Where(dci => criteria.EndDateRange.IncludeFrom ? criteria.EndDateRange.FromDate <= dci.DerivativeContract.EndDate : criteria.EndDateRange.FromDate < dci.DerivativeContract.EndDate);
                 }
 
-                if (criteria.EndDateRange?.LaterDate != null)
+                if (criteria.EndDateRange?.ToDate != null)
                 {
-                    query = query.Where(dci => criteria.EndDateRange.IncludeLater ? dci.DerivativeContract.EndDate <= criteria.EndDateRange.LaterDate : dci.DerivativeContract.EndDate < criteria.EndDateRange.LaterDate);
+                    query = query.Where(dci => criteria.EndDateRange.IncludeTo ? dci.DerivativeContract.EndDate <= criteria.EndDateRange.ToDate : dci.DerivativeContract.EndDate < criteria.EndDateRange.ToDate);
                 }
 
                 if (criteria.OnlyActive)
