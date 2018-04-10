@@ -17,7 +17,7 @@
         <owner>Virto Commerce</owner>
     </owners>
     <projectUrl></projectUrl>
-    <iconUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts/raw/master/VirtoCommerce.DerivativeContractsModule.Web/Content/logo.png</iconUrl>
+    <iconUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts/raw/master/VirtoCommerce.DerivativeContractsModule.Web/Content/logoVC.png</iconUrl>
     <releaseNotes>First version</releaseNotes>
     <copyright>Copyright © 2011-2018 Virto Commerce. All rights reserved</copyright>
     <tags>derivative contracts forward futures options</tags>
