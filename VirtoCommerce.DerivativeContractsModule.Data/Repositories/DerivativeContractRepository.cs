@@ -25,7 +25,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Repositories
             modelBuilder.Entity<DerivativeContractEntity>().ToTable("DerivativeContract").HasKey(x => x.Id).Property(x => x.Id);
 
             modelBuilder.Entity<DerivativeContractItemEntity>().ToTable("DerivativeContractItem").HasKey(x => x.Id).Property(x => x.Id);
-            modelBuilder.Entity<DerivativeContractItemEntity>().HasRequired(dc => dc.DerivativeContract).WithMany().HasForeignKey(dc => dc.DerivativeContractId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<DerivativeContractItemEntity>().HasRequired(dc => dc.DerivativeContract).WithMany(dc => dc.Items).HasForeignKey(dc => dc.DerivativeContractId).WillCascadeOnDelete(true);
             modelBuilder.Entity<DerivativeContractItemEntity>().Property(t => t.DerivativeContractId)
                    .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IX_DerivativeContractItem_DerivativeContractId_FulfillmentCenterId_ProductId", 1) { IsUnique = true }));
             modelBuilder.Entity<DerivativeContractItemEntity>().Property(t => t.FulfillmentCenterId)
@@ -42,12 +42,12 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Repositories
 
         public DerivativeContractEntity[] GetDerivativeContractsByIds(string[] ids)
         {
-            return DerivativeContracts.Where(dc => ids.Contains(dc.Id)).ToArray();
+            return DerivativeContracts.Where(dc => ids.Contains(dc.Id)).Include(dc => dc.Items).ToArray();
         }
 
         public DerivativeContractItemEntity[] GetDerivativeContractItemsByIds(string[] ids)
         {
-            return DerivativeContractItems.Where(dci => ids.Contains(dci.Id)).ToArray();
+            return DerivativeContractItems.Where(dci => ids.Contains(dci.Id)).Include(dci => dci.DerivativeContract).ToArray();
         }
 
         public void RemoveDerivativeContracts(string[] ids)

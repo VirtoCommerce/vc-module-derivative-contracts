@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
-using VirtoCommerce.DerivativeContractsModule.Core;
+using System.Linq.Expressions;
+using LinqKit;
 using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.DerivativeContractsModule.Core.Services;
+using VirtoCommerce.DerivativeContractsModule.Data.Extensions;
+using VirtoCommerce.DerivativeContractsModule.Data.Model;
 using VirtoCommerce.DerivativeContractsModule.Data.Repositories;
 using VirtoCommerce.Domain.Commerce.Model.Search;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Data.Infrastructure;
+using PredicateBuilder = VirtoCommerce.Platform.Core.Common.PredicateBuilder;
 
 namespace VirtoCommerce.DerivativeContractsModule.Data.Services
 {
@@ -40,31 +44,14 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dc => criteriaTypes.Contains(dc.Type));
                 }
 
-                if (criteria.StartDateRange?.FromDate != null)
-                {
-                    query = query.Where(dc => criteria.StartDateRange.IncludeFrom ? criteria.StartDateRange.FromDate <= dc.StartDate : criteria.StartDateRange.FromDate < dc.StartDate);
-                }
-
-                if (criteria.StartDateRange?.ToDate != null)
-                {
-                    query = query.Where(dc => criteria.StartDateRange.IncludeTo ? dc.StartDate <= criteria.StartDateRange.ToDate : dc.StartDate < criteria.StartDateRange.ToDate);
-                }
-
-                if (criteria.EndDateRange?.FromDate != null)
-                {
-                    query = query.Where(dc => criteria.EndDateRange.IncludeFrom ? criteria.EndDateRange.FromDate <= dc.EndDate : criteria.EndDateRange.FromDate < dc.EndDate);
-                }
-
-                if (criteria.EndDateRange?.ToDate != null)
-                {
-                    query = query.Where(dc => criteria.EndDateRange.IncludeTo ? dc.EndDate <= criteria.EndDateRange.ToDate : dc.EndDate < criteria.EndDateRange.ToDate);
-                }
-
                 if (criteria.OnlyActive)
                 {
                     var now = DateTime.Now;
-                    query = query.Where(dc => dc.IsActive && dc.StartDate <= now && (dc.EndDate == null || dc.EndDate >= now) && repository.DerivativeContractItems.Where(dci => dci.DerivativeContractId == dc.Id).Any(dci => dci.RemainingQuantity > 0));
+                    query = query.Where(dc => dc.IsActive && dc.StartDate <= now && (dc.EndDate == null || dc.EndDate >= now) && dc.Items.Any(dci => dci.RemainingQuantity > 0));
                 }
+
+                var predicate = GetQueryPredicate(criteria);
+                query = query.Where(predicate.Expand());
 
                 var sortInfos = criteria.SortInfos;
                 if (sortInfos.IsNullOrEmpty())
@@ -122,31 +109,14 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dci => criteriaTypes.Contains(dci.DerivativeContract.Type));
                 }
 
-                if (criteria.StartDateRange?.FromDate != null)
-                {
-                    query = query.Where(dci => criteria.StartDateRange.IncludeFrom ? criteria.StartDateRange.FromDate <= dci.DerivativeContract.StartDate : criteria.StartDateRange.FromDate < dci.DerivativeContract.StartDate);
-                }
-
-                if (criteria.StartDateRange?.ToDate != null)
-                {
-                    query = query.Where(dci => criteria.StartDateRange.IncludeTo ? dci.DerivativeContract.StartDate <= criteria.StartDateRange.ToDate : dci.DerivativeContract.StartDate < criteria.StartDateRange.ToDate);
-                }
-
-                if (criteria.EndDateRange?.FromDate != null)
-                {
-                    query = query.Where(dci => criteria.EndDateRange.IncludeFrom ? criteria.EndDateRange.FromDate <= dci.DerivativeContract.EndDate : criteria.EndDateRange.FromDate < dci.DerivativeContract.EndDate);
-                }
-
-                if (criteria.EndDateRange?.ToDate != null)
-                {
-                    query = query.Where(dci => criteria.EndDateRange.IncludeTo ? dci.DerivativeContract.EndDate <= criteria.EndDateRange.ToDate : dci.DerivativeContract.EndDate < criteria.EndDateRange.ToDate);
-                }
-
                 if (criteria.OnlyActive)
                 {
                     var now = DateTime.Now;
                     query = query.Where(dci => dci.DerivativeContract.IsActive && dci.DerivativeContract.StartDate <= now && (dci.DerivativeContract.EndDate == null || dci.DerivativeContract.EndDate >= now) && dci.RemainingQuantity > 0);
                 }
+
+                var predicate = GetQueryPredicate(criteria);
+                query = query.Where(predicate.Expand());
 
                 var sortInfos = criteria.SortInfos;
                 if (sortInfos.IsNullOrEmpty())
@@ -168,6 +138,53 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     TotalCount = totalCount
                 };
             }
+        }
+
+        /// <summary>
+        /// Used to define extra where clause for derivative contracts search
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        protected virtual Expression<Func<DerivativeContractEntity, bool>> GetQueryPredicate(DerivativeContractSearchCriteria criteria)
+        {
+            if (!criteria.StartDateRanges.IsNullOrEmpty() || !criteria.EndDateRanges.IsNullOrEmpty())
+            {
+                var predicate = PredicateBuilder.False<DerivativeContractEntity>();
+                if (!criteria.StartDateRanges.IsNullOrEmpty())
+                {
+                    predicate = PredicateBuilder.Or(predicate, ((Expression<Func<DerivativeContractEntity, DateTime?>>) (dci => dci.StartDate)).IsInRanges(criteria.StartDateRanges));
+                }
+
+                if (!criteria.EndDateRanges.IsNullOrEmpty())
+                {
+                    predicate = PredicateBuilder.Or(predicate, ((Expression<Func<DerivativeContractEntity, DateTime?>>) (dci => dci.EndDate)).IsInRanges(criteria.EndDateRanges));
+                }
+                return predicate.Expand();
+            }
+            return PredicateBuilder.True<DerivativeContractEntity>();
+        }
+
+        /// <summary>
+        /// Used to define extra where clause for derivative contract items search
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        protected virtual Expression<Func<DerivativeContractItemEntity, bool>> GetQueryPredicate(DerivativeContractItemSearchCriteria criteria)
+        {
+            if (!criteria.StartDateRanges.IsNullOrEmpty() || !criteria.EndDateRanges.IsNullOrEmpty())
+            {
+                var predicate = PredicateBuilder.False<DerivativeContractItemEntity>();
+                if (!criteria.StartDateRanges.IsNullOrEmpty())
+                {
+                    predicate = PredicateBuilder.Or(predicate, ((Expression<Func<DerivativeContractItemEntity, DateTime?>>) (dci => dci.DerivativeContract.StartDate)).IsInRanges(criteria.StartDateRanges));
+                }
+                if (!criteria.EndDateRanges.IsNullOrEmpty())
+                {
+                    predicate = PredicateBuilder.Or(predicate, ((Expression<Func<DerivativeContractItemEntity, DateTime?>>) (dci => dci.DerivativeContract.EndDate)).IsInRanges(criteria.EndDateRanges));
+                }
+                return predicate.Expand();
+            }
+            return PredicateBuilder.True<DerivativeContractItemEntity>();
         }
     }
 }

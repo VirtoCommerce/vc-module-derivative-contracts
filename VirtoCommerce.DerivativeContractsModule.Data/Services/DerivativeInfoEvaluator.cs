@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
+using LinqKit;
 using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.DerivativeContractsModule.Core.Services;
+using VirtoCommerce.DerivativeContractsModule.Data.Extensions;
+using VirtoCommerce.DerivativeContractsModule.Data.Model;
 using VirtoCommerce.DerivativeContractsModule.Data.Repositories;
 using VirtoCommerce.Platform.Core.Common;
 using VirtoCommerce.Platform.Data.Infrastructure;
+using PredicateBuilder = VirtoCommerce.Platform.Core.Common.PredicateBuilder;
 
 namespace VirtoCommerce.DerivativeContractsModule.Data.Services
 {
@@ -43,25 +48,8 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dci => evaluationContextTypes.Contains(dci.DerivativeContract.Type));
                 }
 
-                if (evaluationContext.StartDateRange?.FromDate != null)
-                {
-                    query = query.Where(dci => evaluationContext.StartDateRange.IncludeFrom ? evaluationContext.StartDateRange.FromDate <= dci.DerivativeContract.StartDate : evaluationContext.StartDateRange.FromDate < dci.DerivativeContract.StartDate);
-                }
-
-                if (evaluationContext.StartDateRange?.ToDate != null)
-                {
-                    query = query.Where(dci => evaluationContext.StartDateRange.IncludeTo ? dci.DerivativeContract.StartDate >= evaluationContext.StartDateRange.ToDate : dci.DerivativeContract.StartDate > evaluationContext.StartDateRange.ToDate);
-                }
-
-                if (evaluationContext.EndDateRange?.FromDate != null)
-                {
-                    query = query.Where(dci => evaluationContext.EndDateRange.IncludeFrom ? evaluationContext.EndDateRange.FromDate <= dci.DerivativeContract.EndDate : evaluationContext.EndDateRange.FromDate < dci.DerivativeContract.EndDate);
-                }
-
-                if (evaluationContext.EndDateRange?.ToDate != null)
-                {
-                    query = query.Where(dci => evaluationContext.EndDateRange.IncludeTo ? dci.DerivativeContract.EndDate >= evaluationContext.EndDateRange.ToDate : dci.DerivativeContract.EndDate > evaluationContext.EndDateRange.ToDate);
-                }
+                var predicate = GetQueryPredicate(evaluationContext);
+                query = query.Where(predicate.Expand());
 
                 if (evaluationContext.OnlyActive)
                 {
@@ -69,22 +57,74 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dci => dci.DerivativeContract.IsActive && dci.DerivativeContract.StartDate <= now && (dci.DerivativeContract.EndDate == null || dci.DerivativeContract.EndDate >= now) && dci.RemainingQuantity > 0);
                 }
 
-                var derivativeContractItems = query.ToArray();
-                var derivativeContractInfos = derivativeContractItems.GroupBy(dci => new { dci.ProductId, dci.DerivativeContract.Type }).Select(dcig =>
-                {
-                    var derivativeContractInfo = AbstractTypeFactory<DerivativeContractInfo>.TryCreateInstance();
-                    derivativeContractInfo.ProductId = dcig.Key.ProductId;
-                    derivativeContractInfo.Type = EnumUtility.SafeParse(dcig.Key.Type, DerivativeContractType.Forward);
-                    derivativeContractInfo.ContractSize = dcig.Sum(dci => dci.ContractSize);
-                    derivativeContractInfo.PurchasedQuantity = dcig.Sum(dci => dci.PurchasedQuantity);
-                    derivativeContractInfo.RemainingQuantity = dcig.Sum(dci => dci.RemainingQuantity);
-                    return derivativeContractInfo;
-                });
+                var derivativeContractItemIds = query.Select(dci => dci.Id).ToArray();
+                var derivativeContractItems = repository.GetDerivativeContractItemsByIds(derivativeContractItemIds);
+                var derivativeContractInfos = (evaluationContext.StartDateRanges.IsNullOrEmpty() ? new DateTimeRange[] { null } : evaluationContext.StartDateRanges).SelectMany(startDateRange =>
+                    (evaluationContext.EndDateRanges.IsNullOrEmpty() ? new DateTimeRange[] { null } : evaluationContext.EndDateRanges).SelectMany(endDateRange =>
+                        derivativeContractItems.Where(GetEvaluationPredicate(startDateRange, endDateRange).Compile()).GroupBy(dci => new { dci.ProductId, dci.DerivativeContract.Type }).Select(dcig =>
+                        {
+                            var derivativeContractInfo = AbstractTypeFactory<DerivativeContractInfo>.TryCreateInstance();
+                            derivativeContractInfo.ProductId = dcig.Key.ProductId;
+                            derivativeContractInfo.Type = EnumUtility.SafeParse(dcig.Key.Type, DerivativeContractType.Forward);
+                            derivativeContractInfo.StartDateRange = startDateRange;
+                            derivativeContractInfo.EndDateRange = endDateRange;
+                            derivativeContractInfo.ContractSize = dcig.Sum(dci => dci.ContractSize);
+                            derivativeContractInfo.PurchasedQuantity = dcig.Sum(dci => dci.PurchasedQuantity);
+                            derivativeContractInfo.RemainingQuantity = dcig.Sum(dci => dci.RemainingQuantity);
+                            return derivativeContractInfo;
+                        })));
 
                 return derivativeContractInfos.ToArray();
             }
         }
 
         #endregion
+        
+        /// <summary>
+        /// Used to define extra where clause for derivative contract items search
+        /// </summary>
+        /// <param name="evaluationContext"></param>
+        /// <returns></returns>
+        protected virtual Expression<Func<DerivativeContractItemEntity, bool>> GetQueryPredicate(DerivativeContractInfoEvaluationContext evaluationContext)
+        {
+            if (!evaluationContext.StartDateRanges.IsNullOrEmpty())
+            {
+                var predicate = PredicateBuilder.False<DerivativeContractItemEntity>();
+                predicate = PredicateBuilder.Or(predicate, ((Expression<Func<DerivativeContractItemEntity, DateTime?>>)(dci => dci.DerivativeContract.StartDate)).IsInRanges(evaluationContext.StartDateRanges));
+                return predicate.Expand();
+            }
+            if (!evaluationContext.EndDateRanges.IsNullOrEmpty())
+            {
+                var predicate = PredicateBuilder.False<DerivativeContractItemEntity>();
+                predicate = PredicateBuilder.Or(predicate, ((Expression<Func<DerivativeContractItemEntity, DateTime?>>)(dci => dci.DerivativeContract.EndDate)).IsInRanges(evaluationContext.EndDateRanges));
+                return predicate.Expand();
+            }
+            return PredicateBuilder.True<DerivativeContractItemEntity>();
+        }
+
+        /// <summary>
+        /// Used to define extra where clause for derivative contract items search
+        /// </summary>
+        /// <param name="startDateRange"></param>
+        /// <param name="endDateRange"></param>
+        /// <returns></returns>
+        protected virtual Expression<Func<DerivativeContractItemEntity, bool>> GetEvaluationPredicate(DateTimeRange startDateRange, DateTimeRange endDateRange)
+        {
+            if (startDateRange != null || endDateRange != null)
+            {
+                var predicate = PredicateBuilder.False<DerivativeContractItemEntity>();
+                if (startDateRange != null)
+                {
+                    predicate = PredicateBuilder.Or(predicate, ((Expression<Func<DerivativeContractItemEntity, DateTime?>>) (dci => dci.DerivativeContract.StartDate)).IsInRange(startDateRange));
+                }
+                if (endDateRange != null)
+                {
+
+                    predicate = PredicateBuilder.Or(predicate, ((Expression<Func<DerivativeContractItemEntity, DateTime?>>) (dci => dci.DerivativeContract.EndDate)).IsInRange(endDateRange));
+                }
+                return predicate.Expand();
+            }
+            return PredicateBuilder.True<DerivativeContractItemEntity>();
+        }
     }
 }

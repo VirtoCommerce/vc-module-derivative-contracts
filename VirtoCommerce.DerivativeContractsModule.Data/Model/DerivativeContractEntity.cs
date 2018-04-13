@@ -24,6 +24,8 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Model
         [Required]
         public bool IsActive { get; set; }
 
+        public ObservableCollection<DerivativeContractItemEntity> Items { get; set; } = new NullCollection<DerivativeContractItemEntity>();
+
         public virtual DerivativeContract ToModel(DerivativeContract derivativeContract)
         {
             if (derivativeContract == null)

@@ -9,6 +9,10 @@ namespace VirtoCommerce.DerivativeContractsModule.Core.Model
 
         public DerivativeContractType Type { get; set; }
 
+        public DateTimeRange StartDateRange { get; set; }
+
+        public DateTimeRange EndDateRange { get; set; }
+
         public long ContractSize { get; set; }
 
         public long PurchasedQuantity { get; set; }
