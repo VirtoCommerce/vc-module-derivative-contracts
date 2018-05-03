@@ -31,6 +31,15 @@
     </scripts>
 
     <settings>
+        <group name="Derivatives|General">
+            <setting>
+                <name>DerivativeContracts.ExportImport.Description</name>
+                <valueType>string</valueType>
+                <defaultValue>Export/Import Derivative contracts with all related objects</defaultValue>
+                <title>Export/Import description</title>
+                <description>Module description in platform export/import wizard</description>
+            </setting>
+        </group>
     </settings>
 
     <permissions>

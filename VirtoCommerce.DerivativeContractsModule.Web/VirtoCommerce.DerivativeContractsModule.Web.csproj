@@ -149,6 +149,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Controllers\Api\DerivativeController.cs" />
+    <Compile Include="ExportImport\DerivativeContractsExportImport.cs" />
     <Compile Include="JsonConverters\PolymorphicDerivativesJsonConverter.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
