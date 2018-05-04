@@ -10,7 +10,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.ExportImport
 {
     public class DerivativeContractsExportImport
     {
-        private const int _batchSize = 20;
+        private const int BatchSize = 50;
         private readonly JsonSerializer _serializer;
 
         private readonly IDerivativeContractService _derivativeContractService;
@@ -59,9 +59,9 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.ExportImport
             writer.WritePropertyName("DerivativeContracts");
             writer.WriteStartArray();
 
-            for (int i = 0; i < totalCount; i += _batchSize)
+            for (int i = 0; i < totalCount; i += BatchSize)
             {
-                var results = _derivativeContractSearchService.SearchDerivativeContracts(new DerivativeContractSearchCriteria { Take = _batchSize, Skip = i }).Results;
+                var results = _derivativeContractSearchService.SearchDerivativeContracts(new DerivativeContractSearchCriteria { Take = BatchSize, Skip = i }).Results;
 
                 foreach (var result in results)
                 {
@@ -69,7 +69,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.ExportImport
                 }
 
                 writer.Flush();
-                progressInfo.Description = $"{Math.Min(totalCount, i + _batchSize)} of {totalCount} DerivativeContracts exported";
+                progressInfo.Description = $"{Math.Min(totalCount, i + BatchSize)} of {totalCount} DerivativeContracts exported";
                 progressCallback(progressInfo);
             }
 
@@ -88,9 +88,9 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.ExportImport
             writer.WritePropertyName("DerivativeContractItems");
             writer.WriteStartArray();
 
-            for (int i = 0; i < totalCount; i += _batchSize)
+            for (int i = 0; i < totalCount; i += BatchSize)
             {
-                var results = _derivativeContractSearchService.SearchDerivativeContractItems(new DerivativeContractItemSearchCriteria { Take = _batchSize, Skip = i }).Results;
+                var results = _derivativeContractSearchService.SearchDerivativeContractItems(new DerivativeContractItemSearchCriteria { Take = BatchSize, Skip = i }).Results;
 
                 foreach (var result in results)
                 {
@@ -98,7 +98,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.ExportImport
                 }
 
                 writer.Flush();
-                progressInfo.Description = $"{Math.Min(totalCount, i + _batchSize)} of {totalCount} DerivativeContractItems exported";
+                progressInfo.Description = $"{Math.Min(totalCount, i + BatchSize)} of {totalCount} DerivativeContractItems exported";
                 progressCallback(progressInfo);
             }
 
