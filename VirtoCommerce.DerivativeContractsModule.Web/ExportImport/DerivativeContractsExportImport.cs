@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using VirtoCommerce.DerivativeContractsModule.Core.Model;
@@ -105,9 +106,13 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.ExportImport
             writer.WriteEndArray();
         }
 
+
         public void DoImport(Stream inputStream, PlatformExportManifest manifest, Action<ExportImportProgressInfo> progressCallback)
         {
             var progressInfo = new ExportImportProgressInfo();
+
+            var contractsTotalCount = 0;
+            var itemsTotalCount = 0;
 
             using (StreamReader streamReader = new StreamReader(inputStream))
             {
@@ -118,20 +123,75 @@ namespace VirtoCommerce.DerivativeContractsModule.Web.ExportImport
                         if (jsonReader.TokenType != JsonToken.PropertyName)
                             continue;
 
-                        if (jsonReader.Value.ToString() == "DerivativeContracts")
+                        if (jsonReader.Value.ToString() == "DerivativeContractsTotalCount")
+                        {
+                            contractsTotalCount = jsonReader.ReadAsInt32() ?? 0;
+                        }
+                        else if (jsonReader.Value.ToString() == "DerivativeContracts")
                         {
                             jsonReader.Read();
-                            var derivativeContracts = _serializer.Deserialize<DerivativeContract[]>(jsonReader);
-                            progressInfo.Description = $"Importing {derivativeContracts.Length} DerivativeContracts...";
-                            progressCallback(progressInfo);
-                            _derivativeContractService.SaveDerivativeContracts(derivativeContracts);
-                        } else if (jsonReader.Value.ToString() == "DerivativeContractItems")
+
+                            //read contracts into internal list and batch save them save
+                            var totalImportedContracts = 0;
+                            if (jsonReader.TokenType == JsonToken.StartArray)
+                            {
+                                jsonReader.Read();
+
+                                var derivativeContract = new List<DerivativeContract>();
+                                while (jsonReader.TokenType != JsonToken.EndArray)
+                                {
+                                    var contract = _serializer.Deserialize<DerivativeContract>(jsonReader);
+                                    derivativeContract.Add(contract);
+                                    totalImportedContracts++;
+
+                                    jsonReader.Read();
+
+                                    if (derivativeContract.Count % BatchSize == 0 || jsonReader.TokenType == JsonToken.EndArray)
+                                    {
+                                        //save batch
+                                        _derivativeContractService.SaveDerivativeContracts(derivativeContract.ToArray());
+                                        derivativeContract.Clear();
+
+                                        progressInfo.Description =  $"{ totalImportedContracts } of { contractsTotalCount } contracts imported";
+                                        progressCallback(progressInfo);
+                                    }
+                                }
+                            }
+                         }
+                        else if (jsonReader.Value.ToString() == "DerivativeContractItemsTotalCount")
+                        {
+                            itemsTotalCount = jsonReader.ReadAsInt32() ?? 0;
+                        }
+                        else if (jsonReader.Value.ToString() == "DerivativeContractItems")
                         {
                             jsonReader.Read();
-                            var derivativeContractItems = _serializer.Deserialize<DerivativeContractItem[]>(jsonReader);
-                            progressInfo.Description = $"Importing {derivativeContractItems.Length} DerivativeContractItem...";
-                            progressCallback(progressInfo);
-                            _derivativeContractService.SaveDerivativeContractItems(derivativeContractItems);
+
+                            //read items into internal list and batch save them save
+                            var totalImportedItems = 0;
+                            if (jsonReader.TokenType == JsonToken.StartArray)
+                            {
+                                jsonReader.Read();
+
+                                var derivativeContractItems = new List<DerivativeContractItem>();
+                                while (jsonReader.TokenType != JsonToken.EndArray)
+                                {
+                                    var item = _serializer.Deserialize<DerivativeContractItem>(jsonReader);
+                                    derivativeContractItems.Add(item);
+                                    totalImportedItems++;
+
+                                    jsonReader.Read();
+
+                                    if (derivativeContractItems.Count % BatchSize == 0 || jsonReader.TokenType == JsonToken.EndArray)
+                                    {
+                                        //save batch
+                                        _derivativeContractService.SaveDerivativeContractItems(derivativeContractItems.ToArray());
+                                        derivativeContractItems.Clear();
+
+                                        progressInfo.Description = $"{ totalImportedItems } of { itemsTotalCount } items imported";
+                                        progressCallback(progressInfo);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
