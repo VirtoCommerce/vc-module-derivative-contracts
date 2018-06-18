@@ -6,26 +6,42 @@ using System.Text;
 using VirtoCommerce.DerivativeContractsModule.Core.Model;
 using VirtoCommerce.DerivativeContractsModule.Core.Services;
 using VirtoCommerce.Platform.Core.ExportImport;
+using VirtoCommerce.Platform.Core.Settings;
 
 namespace VirtoCommerce.DerivativeContractsModule.Web.ExportImport
 {
     public class DerivativeContractsExportImport
     {
-        private const int BatchSize = 50;
         private readonly JsonSerializer _serializer;
 
         private readonly IDerivativeContractService _derivativeContractService;
         private readonly IDerivativeContractSearchService _derivativeContractSearchService;
+        private readonly ISettingsManager _settingsManager;
 
-        public DerivativeContractsExportImport(IDerivativeContractService derivativeContractService, IDerivativeContractSearchService derivativeContractSearchService)
+        private int? _batchSize;
+
+        public DerivativeContractsExportImport(IDerivativeContractService derivativeContractService, IDerivativeContractSearchService derivativeContractSearchService, ISettingsManager settingsManager)
         {
             _derivativeContractService = derivativeContractService;
             _derivativeContractSearchService = derivativeContractSearchService;
+            _settingsManager = settingsManager;
 
             _serializer = new JsonSerializer();
             _serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             _serializer.Formatting = Formatting.Indented;
             _serializer.NullValueHandling = NullValueHandling.Ignore;
+        }
+
+        private int BatchSize
+        {
+            get
+            {
+                if (_batchSize == null)
+                {
+                    _batchSize = _settingsManager.GetValue("DerivativeContracts.ExportImport.PageSize", 50);
+                }
+                return (int)_batchSize;
+            }
         }
 
         public void DoExport(Stream outStream, PlatformExportManifest manifest, Action<ExportImportProgressInfo> progressCallback)
