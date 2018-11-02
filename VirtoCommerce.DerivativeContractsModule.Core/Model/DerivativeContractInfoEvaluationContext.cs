@@ -15,5 +15,7 @@ namespace VirtoCommerce.DerivativeContractsModule.Core.Model
         public DateTimeRange[] EndDateRanges { get; set; }
 
         public bool OnlyActive { get; set; }
+
+        public bool OnlyRemaining { get; set; }
     }
 }

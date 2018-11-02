@@ -50,6 +50,11 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dc => dc.IsActive && dc.StartDate <= now && (dc.EndDate == null || dc.EndDate >= now) && dc.Items.Any(dci => dci.RemainingQuantity > 0));
                 }
 
+                if (criteria.OnlyRemaining)
+                {
+                    query = query.Where(dc => dc.IsActive && dc.Items.Any(dci => dci.RemainingQuantity > 0));
+                }
+
                 var predicate = GetQueryPredicate(criteria);
                 query = query.Where(predicate.Expand());
 

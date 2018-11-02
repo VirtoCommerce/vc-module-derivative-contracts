@@ -57,6 +57,11 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dci => dci.DerivativeContract.IsActive && dci.DerivativeContract.StartDate <= now && (dci.DerivativeContract.EndDate == null || dci.DerivativeContract.EndDate >= now) && dci.RemainingQuantity > 0);
                 }
 
+                if (evaluationContext.OnlyRemaining)
+                {
+                    query = query.Where(dci => dci.DerivativeContract.IsActive && dci.RemainingQuantity > 0);
+                }
+
                 var derivativeContractItemIds = query.Select(dci => dci.Id).ToArray();
                 var derivativeContractItems = repository.GetDerivativeContractItemsByIds(derivativeContractItemIds);
                 var derivativeContractInfos = (evaluationContext.StartDateRanges.IsNullOrEmpty() ? new DateTimeRange[] { null } : evaluationContext.StartDateRanges).SelectMany(startDateRange =>
