@@ -5,7 +5,7 @@
         <version>$version$</version>
         <title>$title$</title>
         <authors>VirtoCommerce</authors>
-        <owners>Virto Commerce</owners>>
+        <owners>Virto Commerce</owners>
         <licenseUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts/blob/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts</projectUrl>
         <iconUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts/blob/master/NuGet/icon.png</iconUrl>
