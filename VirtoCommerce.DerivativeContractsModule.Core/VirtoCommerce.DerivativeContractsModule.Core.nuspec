@@ -6,9 +6,9 @@
         <title>$title$</title>
         <authors>VirtoCommerce</authors>
         <owners>Virto Commerce</owners>
-        <licenseUrl>https://github.com/VirtoCommerce/vc-module-DerivativeContracts/raw/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/VirtoCommerce/vc-module-DerivativeContracts</projectUrl>
-        <iconUrl>https://github.com/VirtoCommerce/vc-module-DerivativeContracts/raw/master/NuGet/icon.png</iconUrl>
+        <licenseUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts</projectUrl>
+        <iconUrl>https://github.com/VirtoCommerce/vc-module-derivative-contracts/blob/master/NuGet/icon.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Virto Commerce Derivative Contracts module for domain layer of VirtoCommerce core entities</description>
         <copyright>Copyright © VirtoCommerce 2018</copyright>

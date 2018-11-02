@@ -120,6 +120,11 @@ namespace VirtoCommerce.DerivativeContractsModule.Data.Services
                     query = query.Where(dci => dci.DerivativeContract.IsActive && dci.DerivativeContract.StartDate <= now && (dci.DerivativeContract.EndDate == null || dci.DerivativeContract.EndDate >= now) && dci.RemainingQuantity > 0);
                 }
 
+                if (criteria.OnlyRemaining)
+                {
+                    query = query.Where(dci => dci.DerivativeContract.IsActive && dci.RemainingQuantity > 0);
+                }
+
                 var predicate = GetQueryPredicate(criteria);
                 query = query.Where(predicate.Expand());
 
